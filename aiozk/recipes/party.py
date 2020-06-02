@@ -15,6 +15,9 @@ class Party(SequentialRecipe):
         self.members = []
         self.change_future = None
 
+    def __len__(self):
+        return len(self.members)
+
     async def join(self):
         await self.create_unique_znode(self.name)
         _, siblings = await self.analyze_siblings()

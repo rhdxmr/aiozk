@@ -11,6 +11,9 @@ from .recipe import Recipe
 
 
 class Allocator(Recipe):
+    """Divide up items among members of party.
+    Multi workers across a cluster can use this recipe to allocate their
+    tasks"""
 
     sub_recipes = {
         "party": (Party, ["member_path", "name"]),
