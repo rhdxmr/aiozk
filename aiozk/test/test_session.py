@@ -240,3 +240,18 @@ async def test_send_timeout(servers, event_loop, path):
                                    timeout=session.timeout + 1)
     finally:
         await session.close()
+
+
+@pytest.mark.asyncio
+async def test_find_server(session):
+    session.make_connection = asynctest.CoroutineMock()
+    conn = mock.MagicMock()
+    conn.close = asynctest.CoroutineMock()
+    conn.start_read_only = True
+    session.make_connection.return_value = conn
+    with pytest.raises(asyncio.TimeoutError):
+        await asyncio.wait_for(session.find_server(allow_read_only=False),
+                               timeout=2)
+
+    conn.start_read_only = False
+    await session.find_server(allow_read_only=False)
